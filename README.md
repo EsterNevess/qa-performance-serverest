@@ -1,6 +1,9 @@
 # Testes de performance com k6 — ServeRest
 
 [![Teste de fumaça (k6)](https://github.com/EsterNevess/qa-performance-serverest/actions/workflows/ci.yml/badge.svg)](https://github.com/EsterNevess/qa-performance-serverest/actions/workflows/ci.yml)
+[![Relatório k6](https://img.shields.io/badge/Relat%C3%B3rio-k6-7D64FF?logo=k6&logoColor=white)](https://esternevess.github.io/qa-performance-serverest/smoke.html)
+
+📊 **[Relatório da última execução](https://esternevess.github.io/qa-performance-serverest/smoke.html)** — publicado automaticamente a cada push.
 
 Testes de carga, fumaça e estresse sobre a API REST do
 [ServeRest](https://github.com/ServeRest/ServeRest), com limites de aceitação explícitos e
@@ -86,6 +89,24 @@ e o CI falha. É o que transforma o teste de performance em porta de qualidade, 
 que ninguém lê.
 
 Usei p(95) e não média de propósito. Média esconde o usuário que esperou dez segundos; percentil, não.
+
+## Relatórios
+
+Cada execução gera três saídas, pela função `handleSummary()` do k6:
+
+| Saída | Para quem |
+|---|---|
+| Resumo no terminal | quem está rodando e quer o resultado na hora |
+| `relatorios/<cenario>.html` | quem vai olhar depois, ou quem não roda testes |
+| `relatorios/<cenario>.json` | comparação entre execuções e integração com outra ferramenta |
+
+O JSON existe de propósito ao lado do HTML: relatório bonito não substitui o dado cru. Para saber
+se uma mudança melhorou ou piorou o desempenho, é preciso comparar números entre execuções — e isso
+se faz com o JSON, não com a captura de tela de um gráfico.
+
+**Detalhe que custa uma execução perdida:** o k6 grava os arquivos, mas **não cria o diretório**. Se
+`relatorios/` não existir, o teste roda inteiro e o relatório se perde no fim, com uma mensagem de
+erro fácil de não notar. Por isso a pasta é versionada e o CI garante a criação antes de rodar.
 
 ## Como rodar
 

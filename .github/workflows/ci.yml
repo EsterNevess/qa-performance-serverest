@@ -7,6 +7,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   smoke:
     runs-on: ubuntu-latest
@@ -34,15 +37,35 @@ jobs:
       - name: Instalar o k6
         uses: grafana/setup-k6-action@v1
 
+      # O k6 grava os relatórios do handleSummary, mas não cria o diretório.
+      - name: Garantir a pasta de relatórios
+        run: mkdir -p relatorios
+
       - name: Executar o teste de fumaça
-        run: k6 run scripts/smoke.js --summary-export=resumo.json
+        id: testes
+        continue-on-error: true
+        run: k6 run scripts/smoke.js
         env:
           BASE_URL: http://localhost:3000
 
-      - name: Publicar o resumo
+      - name: Publicar os relatórios como artefato
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: resumo-k6
-          path: resumo.json
+          name: relatorios-k6
+          path: relatorios/
           if-no-files-found: ignore
+
+      - name: Publicar o relatório no GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: relatorios
+
+      - name: Refletir o resultado do teste
+        if: steps.testes.outcome == 'failure'
+        run: |
+          echo "Algum limite de aceitação foi estourado. Veja o relatório publicado."
+          exit 1

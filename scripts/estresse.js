@@ -7,6 +7,7 @@
 
 import { sleep } from 'k6';
 
+import { gerarRelatorios } from './lib/relatorio.js';
 import { criarUsuario, logar, listarProdutos, detalharProduto } from './lib/api.js';
 
 export const options = {
@@ -37,4 +38,8 @@ export default function (credenciais) {
   }
 
   sleep(1);
+}
+
+export function handleSummary(dados) {
+  return gerarRelatorios(dados, 'estresse');
 }

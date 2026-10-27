@@ -5,6 +5,7 @@
 import { sleep } from 'k6';
 
 import { LIMITES } from './lib/config.js';
+import { gerarRelatorios } from './lib/relatorio.js';
 import { criarUsuario, logar, listarProdutos, detalharProduto } from './lib/api.js';
 
 export const options = {
@@ -34,4 +35,8 @@ export default function (credenciais) {
   // Pausa entre as ações. Usuário real não dispara requisições em sequência
   // sem respirar; sem isso, o teste mede um cenário que não existe.
   sleep(Math.random() * 2 + 1);
+}
+
+export function handleSummary(dados) {
+  return gerarRelatorios(dados, 'carga');
 }
