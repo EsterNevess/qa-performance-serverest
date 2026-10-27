@@ -2,6 +2,7 @@ node_modules/
 serverest.log
 *.db.json
 
-# Saídas de execução (a pasta é versionada, os relatórios não)
+# Saídas de execução (a pasta e a página inicial são versionadas; os relatórios não)
 relatorios/*
 !relatorios/.gitkeep
+!relatorios/index.html

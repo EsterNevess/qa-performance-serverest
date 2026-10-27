@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Relatórios de performance — ServeRest</title>
+  <style>
+    :root {
+      --fundo: #ffffff;
+      --texto: #1a1a1a;
+      --suave: #5b5b5b;
+      --borda: #e2e2e2;
+      --destaque: #7d64ff;
+      --cartao: #fafafa;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --fundo: #16161a; --texto: #ececec; --suave: #a0a0a8;
+        --borda: #2d2d35; --cartao: #1e1e24;
+      }
+    }
+    :root[data-theme="dark"] {
+      --fundo: #16161a; --texto: #ececec; --suave: #a0a0a8;
+      --borda: #2d2d35; --cartao: #1e1e24;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--fundo); color: var(--texto);
+      font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+      padding: 48px 16px;
+    }
+    main { max-width: 640px; margin: 0 auto; }
+    h1 { font-size: 1.6rem; margin: 0 0 8px; }
+    p.sub { color: var(--suave); margin: 0 0 32px; }
+    a.cartao {
+      display: block; padding: 20px; margin-bottom: 12px;
+      border: 1px solid var(--borda); border-radius: 10px;
+      background: var(--cartao); color: inherit; text-decoration: none;
+    }
+    a.cartao:hover { border-color: var(--destaque); }
+    a.cartao strong { display: block; font-size: 1.05rem; }
+    a.cartao span { color: var(--suave); font-size: 0.92rem; }
+    .nota {
+      margin-top: 28px; padding: 16px; border-radius: 10px;
+      border: 1px solid var(--borda); color: var(--suave); font-size: 0.92rem;
+    }
+    footer { margin-top: 32px; color: var(--suave); font-size: 0.88rem; }
+    footer a { color: var(--destaque); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Relatórios de performance — ServeRest</h1>
+    <p class="sub">Testes com k6 sobre a API do ServeRest, em instância local.</p>
+
+    <a class="cartao" href="smoke.html">
+      <strong>Teste de fumaça</strong>
+      <span>1 usuário, 5 iterações — publicado a cada push pelo CI</span>
+    </a>
+
+    <a class="cartao" href="smoke.json">
+      <strong>Dados crus (JSON)</strong>
+      <span>Para comparar execuções ao longo do tempo</span>
+    </a>
+
+    <div class="nota">
+      Os cenários de <strong>carga</strong> (10 usuários) e <strong>estresse</strong> (até 100)
+      rodam localmente, não no CI: levam dois minutos cada e competem por CPU com o runner,
+      o que distorceria a medição. Os números medidos estão no README do repositório.
+    </div>
+
+    <footer>
+      <a href="https://github.com/EsterNevess/qa-performance-serverest">github.com/EsterNevess/qa-performance-serverest</a>
+    </footer>
+  </main>
+</body>
+</html>
