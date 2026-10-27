@@ -1,0 +1,3 @@
+Esta pasta precisa existir antes da execução: o k6 grava os arquivos do
+handleSummary, mas não cria o diretório. Sem ela, o teste roda e o relatório
+se perde no fim — com um erro fácil de não notar.
