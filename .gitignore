@@ -1,0 +1,4 @@
+node_modules/
+resumo.json
+serverest.log
+*.db.json

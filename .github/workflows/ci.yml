@@ -1,0 +1,48 @@
+name: Teste de fumaça (k6)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Preparar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Subir o ServeRest local
+        run: |
+          npm install -g serverest
+          nohup serverest --port 3000 --nodoc > serverest.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:3000/produtos > /dev/null; then
+              echo "ServeRest respondendo"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "ServeRest não subiu a tempo"; cat serverest.log; exit 1
+
+      - name: Instalar o k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Executar o teste de fumaça
+        run: k6 run scripts/smoke.js --summary-export=resumo.json
+        env:
+          BASE_URL: http://localhost:3000
+
+      - name: Publicar o resumo
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resumo-k6
+          path: resumo.json
+          if-no-files-found: ignore
